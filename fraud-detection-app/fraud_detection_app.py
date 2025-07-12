@@ -3,7 +3,12 @@ import joblib
 import pandas as pd
 
 # Load model
-model = joblib.load("fraud_detection_lr_pipeline.pkl")
+
+import os
+model_path = os.path.join(os.path.dirname(__file__), "fraud_detection_lr_pipeline.pkl")
+model = joblib.load(model_path)
+
+# model = joblib.load("fraud_detection_lr_pipeline.pkl")
 
 st.title("Fraud Detection App")
 
