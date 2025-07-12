@@ -2,6 +2,30 @@ import streamlit as st
 import joblib
 import pandas as pd
 
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+
+cat_col = ['type','isOrigBalanceZero','isDestBalanceZero','isNewOrigBalanceZero','is_full_debit']
+num_col = ['amount','oldbalanceOrg','newbalanceOrig','oldbalanceDest','newbalanceDest']
+
+num_pipeline = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='median')),
+    ('scaler', StandardScaler())
+])
+
+cat_pipeline = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('onehot', OneHotEncoder(handle_unknown='ignore'))
+])
+
+preprocessor = ColumnTransformer(transformers=[
+    ('num', num_pipeline, num_col),
+    ('cat', cat_pipeline, cat_col)
+], remainder='drop')
+
+
 # Load model
 
 import os
